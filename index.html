@@ -2,17 +2,27 @@
 <html>
   <head>
     <title>ASCII Art</title>
+    <style>
+      .container {
+        display: flex;
+        justify-content: space-between;
+      }
+    </style>
   </head>
   <body>
     <form>
       <input type="file" id="image-input" onchange="convertToAscii()">
-      <br>
-      <textarea id="ascii-output" rows="10" cols="60"></textarea>
     </form>
+    <div class="container">
+      <img id="original-image">
+      <pre id="ascii-output"></pre>
+    </div>
     <script>
       function convertToAscii() {
         // Get the image data from the input element
         var image = document.getElementById('image-input').files[0];
+        // Update the src attribute of the img element
+        document.getElementById('original-image').src = URL.createObjectURL(image);
         // Create a canvas element
         var canvas = document.createElement('canvas');
         var ctx = canvas.getContext('2d');
@@ -41,8 +51,8 @@
               ascii += " ";
             }
           }
-          // Display the ASCII art in the textarea element
-          document.getElementById('ascii-output').value = ascii;
+          // Display the ASCII art in the pre element
+          document.getElementById('ascii-output').textContent = ascii;
         }
         img.src = URL.createObjectURL(image);
       }
