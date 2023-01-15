@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>ASCII Art</title>
+  </head>
+  <body>
+    <form>
+      <input type="file" id="image-input" onchange="convertToAscii()">
+      <br>
+      <textarea id="ascii-output" rows="10" cols="60"></textarea>
+    </form>
+    <script>
+      function convertToAscii() {
+        // Get the image data from the input element
+        var image = document.getElementById('image-input').files[0];
+        // Create a canvas element
+        var canvas = document.createElement('canvas');
+        var ctx = canvas.getContext('2d');
+        // Create an image element
+        var img = new Image();
+        // When the image is loaded, draw it on the canvas
+        img.onload = function() {
+          canvas.width = img.width;
+          canvas.height = img.height;
+          ctx.drawImage(img, 0, 0);
+          // Get the image data from the canvas
+          var imageData = ctx.getImageData(0, 0, img.width, img.height);
+          // Iterate through each pixel of the image
+          var ascii = "";
+          for (var i = 0; i < imageData.data.length; i += 4) {
+            // Get the grayscale value of the pixel
+            var pixel = imageData.data[i];
+            // Append the appropriate ASCII character based on the grayscale value
+            if (pixel < 25) {
+              ascii += "#";
+            } else if (pixel < 50) {
+              ascii += ":";
+            } else if (pixel < 75) {
+              ascii += ".";
+            } else {
+              ascii += " ";
+            }
+          }
+          // Display the ASCII art in the textarea element
+          document.getElementById('ascii-output').value = ascii;
+        }
+        img.src = URL.createObjectURL(image);
+      }
+    </script>
+  </body>
+</html>
